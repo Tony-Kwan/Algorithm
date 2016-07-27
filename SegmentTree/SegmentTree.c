@@ -13,7 +13,7 @@ T min(T x, T y) {
 }
 
 // --------  Segment Tree  --------
-typedef struct {
+typedef struct SegmentTree {
     T value;
     int leftBound, rightBound;
     struct SegmentTree *leftChild, *rightChild;
@@ -22,17 +22,19 @@ typedef struct {
 
 SegmentTree* build(T array[], int leftBound, int rightBound, OP operation) {
     SegmentTree *st = (SegmentTree*)malloc(sizeof(SegmentTree));
-    st -> value = INF;
-    st -> leftBound = leftBound;
-    st -> rightBound = rightBound;
-    st -> operation = operation;
-    st -> leftChild = st -> rightChild = NULL;
+    st->value = INF;
+    st->leftBound = leftBound;
+    st->rightBound = rightBound;
+    st->operation = operation;
+    st->leftChild = st -> rightChild = NULL;
 
     if (leftBound == rightBound) {
-        st -> value = array[leftBound];
-        return st;
+        st->value = array[leftBound];
     } else {
         int mid = leftBound + (rightBound - leftBound) / 2;
+        st->leftChild = build(array, leftBound, mid, operation);
+        st->rightChild = build(array, mid + 1, rightBound, operation);
+        st->value = operation(st->leftChild->value, st->rightChild->value);
     }
 
     return st;
@@ -43,8 +45,8 @@ int query(int startIdx, int endIdx, OP op) {
 }
 
 int main() {
-    T a[5] = {1, 2, 3, 4, 5};
+    T a[5] = {11, 12, 13, 14, 15};
     SegmentTree *st = build(a, 0, 4 ,min);
-    printf("%p\n", st);
+    printf("%d\n", st->value);
     return 0;
 }
