@@ -29,7 +29,7 @@ SegmentTree* build(T array[], int leftBound, int rightBound, OP operation) {
     st -> leftChild = st -> rightChild = NULL;
 
     if (leftBound == rightBound) {
-        st.value = array[leftBound];
+        st -> value = array[leftBound];
         return st;
     } else {
         int mid = leftBound + (rightBound - leftBound) / 2;
