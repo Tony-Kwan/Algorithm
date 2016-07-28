@@ -67,12 +67,31 @@ int query(SegmentTree *st, int leftBound, int rightBound) {
   }
 }
 
-void replace() {
+void replace(SegmentTree *st, int index, T value) {
+   if (st->leftBound == st->rightBound) {
+       st -> value = value;
+       return;
+   }
+
+   assert(st->leftChild && st->rightChild);
+
+   if (index <= st->leftChild->rightBound) {
+       replace(st->leftChild, index, value);
+   } else if (index >= st->rightChild->leftBound) {
+       replace(st->rightChild, index, value);
+   }
+   st->value = st->operation(st->leftChild->value, st->rightChild->value);
 }
 
 int main(int argc, char* argv[]) {
     T a[5] = {5, 4, 3, 2, 1};
-    SegmentTree *st = build(a, 0, 4, max);
+//    SegmentTree *st = build(a, 0, 4, max);
+//    SegmentTree *st = build(a, 0, 4, min);
+    SegmentTree *st = build(a, 0, 4, sum);
     printf("%d\n", query(st, 1, 4));
+    
+    replace(st, 4, 10);
+    printf("%d\n", query(st, 1, 4));
+    printf("%d\n", query(st, 0, 3));
     return 0;
 }
