@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <assert.h>
 
 #define INF (-(1 << 30))
 
-typedef int (*OP)(int, int);
 typedef int T;
+typedef T(*OP)(T, T);
 
 //sample operation
 T max(T x, T y) {
@@ -53,14 +54,15 @@ int query(SegmentTree *st, int leftBound, int rightBound) {
       return st->value;
   }
 
-  int mid = leftBound + (rightBound - leftBound) / 2;
-  if (rightBound <= mid) {
-      return query(st->leftChild, leftBound, mid);
-  } else if (leftBound >= mid + 1) {
-      return query(st->rightChild, mid + 1, rightBound);
+  assert(st->leftChild && st->rightChild);
+
+  if (rightBound <= st->leftChild->rightBound) {
+      return query(st->leftChild, leftBound, st->leftChild->rightBound);
+  } else if (leftBound >= st->rightChild->leftBound) {
+      return query(st->rightChild, st->rightChild->leftBound, rightBound);
   } else {
-      T leftValue = query(st->leftChild, leftBound, mid);
-      T rightValue = query(st->rightChild, mid + 1, rightBound);
+      T leftValue = query(st->leftChild, leftBound, st->leftChild->rightBound);
+      T rightValue = query(st->rightChild, st->rightChild->leftBound, rightBound);
       return st->operation(leftValue, rightValue);
   }
 }
@@ -68,9 +70,9 @@ int query(SegmentTree *st, int leftBound, int rightBound) {
 void replace() {
 }
 
-int main() {
+int main(int argc, char* argv[]) {
     T a[5] = {5, 4, 3, 2, 1};
-    SegmentTree *st = build(a, 0, 4, sum);
-    printf("%d\n", query(st, 0, 4));
+    SegmentTree *st = build(a, 0, 4, max);
+    printf("%d\n", query(st, 1, 4));
     return 0;
 }
