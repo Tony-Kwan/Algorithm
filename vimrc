@@ -38,7 +38,6 @@ set smartcase
 "set si
 set ci
 set wrap
-set nocompatible
 
 set encoding=utf-8
 set shiftwidth=4
@@ -46,8 +45,6 @@ set tabstop=4
 set softtabstop=4
 set expandtab
 set showmode
-
-set clipboard=unnamed
 
 "colorscheme desert
 colorscheme brighton
