@@ -3,7 +3,6 @@ class Node(object):
         self.k = k
         self.s = s
         self.child = []
-        self.ret = ''
 
     def __str__(self):
         return '(%d, %s)' % (self.k, self.s)
@@ -16,8 +15,7 @@ class Solution(object):
         result = self.getSub(s)
         root = result[0]
         self.build(root)
-        self.postOrder(root)
-        return root.ret
+        return self.postOrder(root)
 
     def build(self, node):
         restStr = node.s
@@ -59,14 +57,13 @@ class Solution(object):
         return s.find('[') == -1
 
     def postOrder(self, node):
+        one = ''
         if len(node.child):
-            tmp = ''
             for child in node.child:
-                self.postOrder(child)
-                tmp += child.ret
-            node.ret = tmp * node.k
+                one += self.postOrder(child)
         else:
-            node.ret = node.s * node.k
+            one = node.s
+        return one * node.k
 
 print Solution().decodeString("3[a]2[bc]")        #aaabcbc
 print Solution().decodeString("3[a2[c]]")           #accaccacc
